@@ -3,19 +3,18 @@ package com.zaurh.movietimenew.presentation.navigation
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.zaurh.movietimenew.presentation.details.DetailScreen
+import com.zaurh.movietimenew.presentation.discover.DiscoverScreen
 import com.zaurh.movietimenew.presentation.home.HomeScreen
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
     startDestination: String,
 ) {
     NavHost(
@@ -35,7 +34,6 @@ fun NavGraph(
             }
         ) {
             HomeScreen(
-                modifier = modifier,
                 navController = navController
             )
         }
@@ -55,29 +53,28 @@ fun NavGraph(
 //            )
 //        }
 //
-//        composable(
-//            route = Screen.DiscoverScreen.route,
-//            enterTransition = {
-//                slideInHorizontally(initialOffsetX = { it })
-//            },
-//            popEnterTransition = {
-//                slideInHorizontally(initialOffsetX = { -it })
-//            },
-//            exitTransition = {
-//                slideOutHorizontally(targetOffsetX = { -it })
-//            },
-//            popExitTransition = {
-//                slideOutHorizontally(targetOffsetX = { it })
-//            },
-//            arguments = listOf(
-//                navArgument("genreId") { type = NavType.LongType },
-//                navArgument("genreName") { type = NavType.StringType }
-//            )) {
-//            DiscoverScreen(
-//                modifier = modifier,
-//                navController = navController
-//            )
-//        }
+        composable(
+            route = Screen.DiscoverScreen.route,
+            enterTransition = {
+                slideInHorizontally(initialOffsetX = { it })
+            },
+            popEnterTransition = {
+                slideInHorizontally(initialOffsetX = { -it })
+            },
+            exitTransition = {
+                slideOutHorizontally(targetOffsetX = { -it })
+            },
+            popExitTransition = {
+                slideOutHorizontally(targetOffsetX = { it })
+            },
+            arguments = listOf(
+                navArgument("genreId") { type = NavType.LongType },
+                navArgument("genreName") { type = NavType.StringType }
+            )) {
+            DiscoverScreen(
+                navController = navController
+            )
+        }
 //
 //        composable(
 //            route = Screen.PreferencesScreen.route,
@@ -130,7 +127,6 @@ fun NavGraph(
             }
         ) {
             DetailScreen(
-                modifier = modifier,
                 navController = navController
             )
         }

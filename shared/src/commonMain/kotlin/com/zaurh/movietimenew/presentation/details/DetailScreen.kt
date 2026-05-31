@@ -1,7 +1,6 @@
 package com.zaurh.movietimenew.presentation.details
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -13,13 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -31,12 +26,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,14 +51,14 @@ import com.zaurh.movietimenew.util.Constants.EMPTY_IMAGE_URL
 import com.zaurh.movietimenew.util.EMPTY
 import com.zaurh.movietimenew.util.getOutfitFont
 import movietimenew.shared.generated.resources.Res
+import movietimenew.shared.generated.resources.ic_back
 import movietimenew.shared.generated.resources.ic_gallery
 import movietimenew.shared.generated.resources.ic_gamepad
-import org.koin.compose.koinInject
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun DetailScreen(
-    modifier: Modifier,
     navController: NavController,
     viewModel: MovieDetailsViewModel = koinViewModel()
 ) {
@@ -122,7 +115,6 @@ fun DetailScreen(
 //    )
 
     DetailContent(
-        modifier = modifier,
         uiState = uiState,
         onAction = viewModel::onAction
     )
@@ -191,11 +183,11 @@ fun DetailContent(
                     onClick = {
                         onAction(DetailsAction.OnBackClicked)
                     }) {
-//                Icon(
-//                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//                    contentDescription = "",
-//                    tint = Color.White
-//                )
+                    Icon(
+                        painter = painterResource(Res.drawable.ic_back),
+                        contentDescription = "",
+                        tint = Color.White
+                    )
                 }
                 IconButton(
                     colors = IconButtonDefaults.iconButtonColors(
