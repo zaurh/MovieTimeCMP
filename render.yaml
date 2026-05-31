@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: cmp-web
+    env: static
+    buildCommand: ./gradlew :webApp:jsBrowserProductionWebpack
+    staticPublishPath: webApp/build/kotlin-webpack/js/productionExecutable
+    envVars:
+      - key: JAVA_VERSION
+        value: 17
