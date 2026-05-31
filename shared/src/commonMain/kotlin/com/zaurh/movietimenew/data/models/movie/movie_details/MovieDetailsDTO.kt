@@ -1,0 +1,37 @@
+package com.zaurh.movietimenew.data.models.movie.movie_details
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class MovieDetailsDTO(
+    val adult: Boolean? = null,
+    val backdrop_path: String? = null,
+    val belongs_to_collection: MovieDetailsBelongsToCollectionDTO? = null,
+    val budget: Long? = null,
+    val genres: List<MovieDetailsGenreDTO>? = null,
+    val homepage: String? = null,
+    val id: Long? = null,
+    val imdb_id: String? = null,
+    val origin_country: List<String>? = null,
+    val original_language: String? = null,
+    val original_title: String? = null,
+    val overview: String? = null,
+    val popularity: Double? = null,
+    val poster_path: String? = null,
+    val production_companies: List<MovieDetailsProductionCompanyDTO>? = null,
+    val production_countries: List<MovieDetailsProductionCountryDTO>? = null,
+    val release_date: String? = null,
+    val revenue: Long? = null,
+    val runtime: Int? = null,
+    val spoken_languages: List<MovieDetailsSpokenLanguageDTO>? = null,
+    val status: String? = null,
+    val tagline: String? = null,
+    val title: String? = null,
+    val video: Boolean? = null,
+    val vote_average: Double? = null,
+    val vote_count: Int? = null
+)
+
+
+
+

@@ -1,0 +1,65 @@
+package com.zaurh.movietimenew.di
+
+import androidx.lifecycle.SavedStateHandle
+import com.zaurh.movietimenew.data.repository.MovieRepoImpl
+import com.zaurh.movietimenew.data.service.MovieApi
+import com.zaurh.movietimenew.presentation.main.MainViewModel
+import com.zaurh.movietimenew.util.Constants.API_KEY
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.header
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import org.koin.compose.koinInject
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import com.zaurh.movietimenew.domain.repository.MovieRepository
+import com.zaurh.movietimenew.presentation.details.MovieDetailsViewModel
+import com.zaurh.movietimenew.presentation.search.SearchViewModel
+import com.zaurh.movietimenew.util.Constants.API_KEY_V4
+import org.koin.core.module.dsl.viewModel
+import org.koin.plugin.module.dsl.viewModel
+
+val appModule = module {
+    single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        isLenient = true
+                    }
+                )
+            }
+
+            defaultRequest {
+                url("https://api.themoviedb.org/3/")
+                header("Authorization", "Bearer $API_KEY_V4")
+                header("accept", "application/json")
+            }
+        }
+    }
+
+    single { MovieApi(get()) }
+
+    single<MovieRepository> {
+        MovieRepoImpl(get())
+    }
+    single { MainViewModel(get()) }
+
+    single { SearchViewModel() }
+
+    viewModel { (handle: SavedStateHandle) ->
+        MovieDetailsViewModel(get(), handle)
+    }
+}
+
+
+fun initKoin() {
+    startKoin {
+        modules(appModule)
+    }
+}
