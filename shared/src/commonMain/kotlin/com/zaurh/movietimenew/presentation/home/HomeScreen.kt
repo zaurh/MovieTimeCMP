@@ -56,7 +56,6 @@ fun HomeScreen(
     val unselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
     val scope = rememberCoroutineScope()
 
-
     val tabItems = listOf(
         TabItem(
             index = 0,
