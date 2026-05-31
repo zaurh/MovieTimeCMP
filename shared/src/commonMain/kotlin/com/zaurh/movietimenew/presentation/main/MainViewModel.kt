@@ -2,6 +2,7 @@ package com.zaurh.movietimenew.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zaurh.movietimenew.domain.repository.GenreRepository
 import com.zaurh.movietimenew.presentation.main.MainSideEffect.NavigateToDetailsScreen
 import com.zaurh.movietimenew.presentation.main.MainSideEffect.NavigateToDiscoverScreen
 import com.zaurh.movietimenew.domain.repository.MovieRepository
@@ -16,7 +17,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val genreRepository: GenreRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUIState())
@@ -42,10 +44,10 @@ class MainViewModel(
     }
 
     private fun onInit() {
-
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
+            val genres = async { genreRepository.getGenres() }
             val upcoming = async { movieRepository.getUpcomingMovies() }
             val popular = async { movieRepository.getPopularMovies() }
             val nowPlaying = async { movieRepository.getNowPlayingMovies() }
@@ -55,32 +57,24 @@ class MainViewModel(
             val popularResult = popular.await()
             val nowPlayingResult = nowPlaying.await()
             val topRatedResult = topRated.await()
+            val genresResult = genres.await()
 
             var newState = _uiState.value
 
-
+            genresResult.onSuccess {
+                newState = newState.copy(genres = it.genres)
+            }
             upcomingResult.onSuccess {
                 newState = newState.copy(upcomingMovies = it.results)
-            }.onError { _, message ->
-                println("sdjadkjsa: $message")
             }
-
             popularResult.onSuccess {
                 newState = newState.copy(popularMovies = it.results)
-            }.onError { _, message ->
-
             }
-
             nowPlayingResult.onSuccess {
                 newState = newState.copy(nowPlayingMovies = it.results)
-            }.onError { _, message ->
-
             }
-
             topRatedResult.onSuccess {
                 newState = newState.copy(topRatedMovies = it.results)
-            }.onError { _, message ->
-
             }
 
             _uiState.update { newState.copy(isLoading = false) }

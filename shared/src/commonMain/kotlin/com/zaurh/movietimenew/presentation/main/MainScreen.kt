@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
+import com.zaurh.movietimenew.presentation.main.components.GenresItem
 import com.zaurh.movietimenew.presentation.main.components.UpcomingMovieItem
 import com.zaurh.movietimenew.presentation.main.components.MainMovieComponent
 import com.zaurh.movietimenew.presentation.mapper.movie.toUIModel
@@ -53,12 +56,7 @@ fun MainScreen(
     viewModel: MainViewModel = koinInject(),
     navController: NavController
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    val upcomingMovies = uiState.value.upcomingMovies
-    val popularMovies = uiState.value.popularMovies
-    val nowPlayingMovies = uiState.value.nowPlayingMovies
-    val topRatedMovies = uiState.value.topRatedMovies
-
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.onEvent(MainEvent.OnInit)
@@ -81,7 +79,7 @@ fun MainScreen(
     val pagerState =
         rememberPagerState(
             initialPage = ZERO,
-            pageCount = { upcomingMovies.size })
+            pageCount = { uiState.upcomingMovies.size })
 
     var scrollJob: Job? by remember { mutableStateOf(null) }
     val scope = rememberCoroutineScope()
@@ -120,10 +118,10 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height((screenHeight.value * 0.6).dp)
-                        .shimmer(isLoading = uiState.value.isLoading),
+                        .shimmer(isLoading = uiState.isLoading),
                     state = pagerState,
                 ) { page ->
-                    val movie = upcomingMovies.getOrNull(page)
+                    val movie = uiState.upcomingMovies.getOrNull(page)
                     movie?.let {
                         UpcomingMovieItem(it) { movieId ->
                             viewModel.onEvent(MainEvent.OnMovieClicked(movieId))
@@ -151,16 +149,35 @@ fun MainScreen(
             }
 
             Text(
-                text = "Genres",
+                text = "Categories",
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(12.dp),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
 
-            MainMovieComponent("Popular", popularMovies.map { it.toUIModel() }, viewModel)
-            MainMovieComponent("Now playing", nowPlayingMovies.map { it.toUIModel() }, viewModel)
-            MainMovieComponent("Top rated", topRatedMovies.map { it.toUIModel() }, viewModel)
+            LazyRow {
+                items(uiState.genres) {
+                    GenresItem(
+                        genre = it,
+                        onGenreClick = { genreName, genreId ->
+                            viewModel.onEvent(MainEvent.OnGenreClicked(genreName, genreId))
+                        }
+                    )
+                }
+            }
+
+            MainMovieComponent("Popular", uiState.popularMovies.map { it.toUIModel() }, viewModel)
+            MainMovieComponent(
+                "Now playing",
+                uiState.nowPlayingMovies.map { it.toUIModel() },
+                viewModel
+            )
+            MainMovieComponent(
+                "Top rated",
+                uiState.topRatedMovies.map { it.toUIModel() },
+                viewModel
+            )
 
             Spacer(Modifier.height(64.dp))
         }

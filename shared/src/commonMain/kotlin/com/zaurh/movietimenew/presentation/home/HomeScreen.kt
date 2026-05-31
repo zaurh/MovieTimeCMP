@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.zaurh.movietimenew.presentation.search.SearchScreen
 import com.zaurh.movietimenew.presentation.main.MainScreen
 import com.zaurh.movietimenew.presentation.navigation.Screen
+import com.zaurh.movietimenew.util.getOutfitFont
 import kotlinx.coroutines.launch
 import movietimenew.shared.generated.resources.Res
 import movietimenew.shared.generated.resources.compose_multiplatform
@@ -106,7 +107,8 @@ fun HomeScreen(
                             TopAppBar(
                                 title = {
                                     Text(
-                                        text = "Search"
+                                        text = "Search",
+                                        fontFamily = getOutfitFont()
                                     )
                                 }
                             )
@@ -116,7 +118,8 @@ fun HomeScreen(
                             TopAppBar(
                                 title = {
                                     Text(
-                                        text = "Game"
+                                        text = "Game",
+                                        fontFamily = getOutfitFont()
                                     )
                                 }
                             )
@@ -126,7 +129,8 @@ fun HomeScreen(
                             TopAppBar(
                                 title = {
                                     Text(
-                                        text = "Favorites"
+                                        text = "Favorites",
+                                        fontFamily = getOutfitFont()
                                     )
                                 }
                             )
@@ -136,7 +140,8 @@ fun HomeScreen(
                             TopAppBar(
                                 title = {
                                     Text(
-                                        text = "Profile"
+                                        text = "Profile",
+                                        fontFamily = getOutfitFont()
                                     )
                                 }
                             )

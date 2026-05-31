@@ -1,8 +1,11 @@
 package com.zaurh.movietimenew.di
 
 import androidx.lifecycle.SavedStateHandle
+import com.zaurh.movietimenew.data.repository.GenreRepoImpl
 import com.zaurh.movietimenew.data.repository.MovieRepoImpl
+import com.zaurh.movietimenew.data.service.GenreApi
 import com.zaurh.movietimenew.data.service.MovieApi
+import com.zaurh.movietimenew.domain.repository.GenreRepository
 import com.zaurh.movietimenew.presentation.main.MainViewModel
 import com.zaurh.movietimenew.util.Constants.API_KEY
 import io.ktor.client.HttpClient
@@ -44,11 +47,15 @@ val appModule = module {
     }
 
     single { MovieApi(get()) }
+    single { GenreApi(get()) }
 
     single<MovieRepository> {
         MovieRepoImpl(get())
     }
-    single { MainViewModel(get()) }
+    single<GenreRepository> {
+        GenreRepoImpl(get())
+    }
+    single { MainViewModel(movieRepository = get(), genreRepository = get()) }
 
     single { SearchViewModel() }
 

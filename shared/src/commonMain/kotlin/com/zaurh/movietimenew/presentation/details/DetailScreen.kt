@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.zaurh.movietimenew.domain.models.movie.movie_credits.MovieCreditsCast
 import com.zaurh.movietimenew.domain.models.movie.movie_details.MovieDetailsGenre
+import com.zaurh.movietimenew.presentation.details.components.CastRow
 import com.zaurh.movietimenew.presentation.details.components.MovieDetailsActionButton
 import com.zaurh.movietimenew.presentation.details.components.MovieDetailsReviewButton
 import com.zaurh.movietimenew.presentation.details.components.MovieDetailsTitleItem
@@ -215,7 +216,6 @@ fun DetailContent(
             }
 
 
-
             MovieDetailsTitleItem(uiState)
             if (!uiState.isLoading) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -262,13 +262,7 @@ fun DetailContent(
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            LazyRow {
-                items(uiState.credits) {
-                    CastItem(cast = it, onClick = { id ->
-                        onAction(DetailsAction.OnCastClick(id))
-                    })
-                }
-            }
+            CastRow(uiState, onAction)
 
             Row(
                 modifier = Modifier
@@ -302,45 +296,6 @@ fun DetailContent(
         }
     }
     MovieDetailsGameBottomSheet(uiState, onAction)
-}
-
-@Composable
-fun CastItem(
-    cast: MovieCreditsCast,
-    onClick: (Long) -> Unit = {}
-) {
-    Column(
-        modifier = Modifier
-            .height(200.dp)
-            .width(140.dp)
-            .clickable {
-                onClick(cast.id)
-            }, horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AsyncImage(
-            modifier = Modifier
-                .padding(8.dp)
-                .size(80.dp)
-                .clip(CircleShape),
-            model = cast.profilePath.ifEmpty { EMPTY_IMAGE_URL },
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
-        Text(
-            text = cast.character,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.primary,
-            fontFamily = getOutfitFont(),
-            textAlign = TextAlign.Center
-        )
-        Text(
-            text = cast.name,
-            fontSize = 12.sp,
-            color = MaterialTheme.colorScheme.secondary,
-            fontFamily = getOutfitFont(),
-            textAlign = TextAlign.Center
-        )
-    }
 }
 
 @Preview

@@ -1,5 +1,7 @@
 package com.zaurh.movietimenew.presentation.main.components
 
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -21,17 +23,32 @@ fun MainMovieComponent(
     movieList: List<MovieUIModel>,
     viewModel: MainViewModel
 ) {
-    Text(
-        text = title,
-        modifier = Modifier.padding(12.dp),
-        color = MaterialTheme.colorScheme.primary,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.Bold
-    )
-    LazyRow {
-        items(movieList) {
-            MovieItem(it) { movieId ->
-                viewModel.onEvent(MainEvent.OnMovieClicked(movieId))
+    BoxWithConstraints {
+
+        val posterWidth = when {
+            maxWidth < 600.dp -> 100.dp
+            maxWidth < 900.dp -> 140.dp
+            else -> 180.dp
+        }
+
+        Column {
+            Text(
+                text = title,
+                modifier = Modifier.padding(12.dp),
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            LazyRow {
+                items(movieList) {
+                    MovieItem(
+                        movieData = it,
+                        posterWidth = posterWidth
+                    ) { movieId ->
+                        viewModel.onEvent(MainEvent.OnMovieClicked(movieId))
+                    }
+                }
             }
         }
     }
