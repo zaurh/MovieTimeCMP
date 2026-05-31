@@ -2,14 +2,10 @@ package com.zaurh.movietimenew.presentation.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,23 +17,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.zaurh.movietimenew.presentation.search.SearchScreen
 import com.zaurh.movietimenew.presentation.main.MainScreen
 import com.zaurh.movietimenew.presentation.navigation.Screen
+import com.zaurh.movietimenew.presentation.search.SearchScreen
 import com.zaurh.movietimenew.util.getOutfitFont
 import kotlinx.coroutines.launch
 import movietimenew.shared.generated.resources.Res
-import movietimenew.shared.generated.resources.compose_multiplatform
 import movietimenew.shared.generated.resources.ic_home
 import movietimenew.shared.generated.resources.ic_search
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.getDrawableResourceBytes
-import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +38,8 @@ fun HomeScreen(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val args = navBackStackEntry?.arguments
+
 
     LaunchedEffect(currentRoute){
         println("currentRoute: $currentRoute")
@@ -147,14 +140,13 @@ fun HomeScreen(
                         }
                     }
                 }
-
             }
         },
         content = { paddingValues ->
             Box {
                 HorizontalPager(
                     state = pagerState,
-                    modifier = modifier,
+                    modifier = modifier.padding(paddingValues),
                     pageContent = { index ->
                         when (index) {
                             0 -> MainScreen(
