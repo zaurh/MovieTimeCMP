@@ -2,7 +2,11 @@ package com.zaurh.movietimenew.presentation.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zaurh.movietimenew.data.mapper.search.toMultiItem
+import com.zaurh.movietimenew.domain.repository.SearchRepository
+import com.zaurh.movietimenew.util.EMPTY
 import com.zaurh.movietimenew.util.onError
+import com.zaurh.movietimenew.util.onSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,7 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-//    private val searchRepository: SearchRepository,
+    private val searchRepository: SearchRepository,
 //    private val trendingRepository: TrendingRepository
 ) : ViewModel() {
 
@@ -150,52 +154,52 @@ class SearchViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-//            searchRepository.searchMulti(query = query, page = page).onSuccess { result ->
-//                val searchedMulti = result.results
-//
-//                val sortedMulti = when (uiState.value.searchFilterSortType) {
-//                    SearchFilterSortType.POPULARITY -> searchedMulti.sortedByDescending { it.popularity }
-//                    SearchFilterSortType.RELEASE_DATE -> searchedMulti.sortedByDescending { it.releaseDate.ifEmpty { it.firstAirDate } }
-//                    SearchFilterSortType.VOTE_COUNT -> searchedMulti.sortedByDescending { it.voteCount }
-//                    SearchFilterSortType.MOST_LIKED -> searchedMulti.sortedByDescending { it.voteAverage }
-//                }
-//
-//                if (searchedMulti.isEmpty()) {
-//                    _uiState.update {
-//                        it.copy(
-//                            message = UIText.StringResource(R.string.search_nothing_found),
-//                            isLoading = false,
-//                            searchedMulti = listOf(),
-//                            pageSwitcherShown = false,
-//                            trendingTextShown = false
-//                        )
-//                    }
-//                    return@onSuccess
-//                }
-//
-//                _uiState.update {
-//                    it.copy(
-//                        page = result.page,
-//                        totalPages = result.totalPages,
-//                        totalResults = result.totalResults,
-//                        searchedMulti = sortedMulti,
-//                        pageSwitcherShown = true,
-//                        isLoading = false,
-//                        message = null,
-//                        trendingTextShown = false
-//                    )
-//                }
-//                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
-//            }.onError { _, message ->
-//                _uiState.update {
-//                    it.copy(
-//                        message = UIText.DynamicString(message),
-//                        isLoading = false,
-//                        pageSwitcherShown = false,
-//                        trendingTextShown = false
-//                    )
-//                }
-//            }
+            searchRepository.searchMulti(query = query, page = page).onSuccess { result ->
+                val searchedMulti = result.results
+
+                val sortedMulti = when (uiState.value.searchFilterSortType) {
+                    SearchFilterSortType.POPULARITY -> searchedMulti.sortedByDescending { it.popularity }
+                    SearchFilterSortType.RELEASE_DATE -> searchedMulti.sortedByDescending { it.releaseDate.ifEmpty { it.firstAirDate } }
+                    SearchFilterSortType.VOTE_COUNT -> searchedMulti.sortedByDescending { it.voteCount }
+                    SearchFilterSortType.MOST_LIKED -> searchedMulti.sortedByDescending { it.voteAverage }
+                }
+
+                if (searchedMulti.isEmpty()) {
+                    _uiState.update {
+                        it.copy(
+                            message = "Nothing found",
+                            isLoading = false,
+                            searchedMulti = listOf(),
+                            pageSwitcherShown = false,
+                            trendingTextShown = false
+                        )
+                    }
+                    return@onSuccess
+                }
+
+                _uiState.update {
+                    it.copy(
+                        page = result.page,
+                        totalPages = result.totalPages,
+                        totalResults = result.totalResults,
+                        searchedMulti = sortedMulti,
+                        pageSwitcherShown = true,
+                        isLoading = false,
+                        message = EMPTY,
+                        trendingTextShown = false
+                    )
+                }
+                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
+            }.onError { _, message ->
+                _uiState.update {
+                    it.copy(
+                        message = message,
+                        isLoading = false,
+                        pageSwitcherShown = false,
+                        trendingTextShown = false
+                    )
+                }
+            }
         }
     }
 
@@ -203,51 +207,51 @@ class SearchViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-//            searchRepository.searchMovies(query = query, page = page).onSuccess { result ->
-//                val searchedMovies = result.results
-//                val sortedMovies = when (uiState.value.searchFilterSortType) {
-//                    SearchFilterSortType.POPULARITY -> searchedMovies.sortedByDescending { it.popularity }
-//                    SearchFilterSortType.RELEASE_DATE -> searchedMovies.sortedByDescending { it.releaseDate }
-//                    SearchFilterSortType.VOTE_COUNT -> searchedMovies.sortedByDescending { it.voteCount }
-//                    SearchFilterSortType.MOST_LIKED -> searchedMovies.sortedByDescending { it.voteAverage }
-//                }
-//
-//                if (searchedMovies.isEmpty()) {
-//                    _uiState.update {
-//                        it.copy(
-//                            message = UIText.StringResource(R.string.search_no_movies_found),
-//                            isLoading = false,
-//                            searchedMulti = listOf(),
-//                            pageSwitcherShown = false,
-//                            trendingTextShown = false
-//                        )
-//                    }
-//                    return@onSuccess
-//                }
-//
-//                _uiState.update {
-//                    it.copy(
-//                        page = result.page,
-//                        totalPages = result.totalPages,
-//                        totalResults = result.totalResults,
-//                        searchedMulti = sortedMovies.map { movie -> movie.toMultiItem() },
-//                        pageSwitcherShown = true,
-//                        isLoading = false,
-//                        message = null,
-//                        trendingTextShown = false
-//                    )
-//                }
-//                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
-//            }.onError { _, message ->
-//                _uiState.update {
-//                    it.copy(
-//                        message = UIText.DynamicString(message),
-//                        isLoading = false,
-//                        pageSwitcherShown = false,
-//                        trendingTextShown = false
-//                    )
-//                }
-//            }
+            searchRepository.searchMovies(query = query, page = page).onSuccess { result ->
+                val searchedMovies = result.results
+                val sortedMovies = when (uiState.value.searchFilterSortType) {
+                    SearchFilterSortType.POPULARITY -> searchedMovies.sortedByDescending { it.popularity }
+                    SearchFilterSortType.RELEASE_DATE -> searchedMovies.sortedByDescending { it.releaseDate }
+                    SearchFilterSortType.VOTE_COUNT -> searchedMovies.sortedByDescending { it.voteCount }
+                    SearchFilterSortType.MOST_LIKED -> searchedMovies.sortedByDescending { it.voteAverage }
+                }
+
+                if (searchedMovies.isEmpty()) {
+                    _uiState.update {
+                        it.copy(
+                            message = "No movies found",
+                            isLoading = false,
+                            searchedMulti = listOf(),
+                            pageSwitcherShown = false,
+                            trendingTextShown = false
+                        )
+                    }
+                    return@onSuccess
+                }
+
+                _uiState.update {
+                    it.copy(
+                        page = result.page,
+                        totalPages = result.totalPages,
+                        totalResults = result.totalResults,
+                        searchedMulti = sortedMovies.map { movie -> movie.toMultiItem() },
+                        pageSwitcherShown = true,
+                        isLoading = false,
+                        message = EMPTY,
+                        trendingTextShown = false
+                    )
+                }
+                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
+            }.onError { _, message ->
+                _uiState.update {
+                    it.copy(
+                        message = message,
+                        isLoading = false,
+                        pageSwitcherShown = false,
+                        trendingTextShown = false
+                    )
+                }
+            }
         }
     }
 
@@ -255,45 +259,45 @@ class SearchViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-//            searchRepository.searchPerson(query = query, page = page).onSuccess { result ->
-//                val searchedPeople = result.results
-//
-//                if (searchedPeople.isEmpty()) {
-//                    _uiState.update {
-//                        it.copy(
-//                            message = UIText.StringResource(R.string.search_no_person_found),
-//                            isLoading = false,
-//                            searchedMulti = listOf(),
-//                            pageSwitcherShown = false,
-//                            trendingTextShown = false
-//                        )
-//                    }
-//                    return@onSuccess
-//                }
-//
-//                _uiState.update {
-//                    it.copy(
-//                        page = result.page,
-//                        totalPages = result.totalPages,
-//                        totalResults = result.totalResults,
-//                        searchedMulti = searchedPeople.map { person -> person.toMultiItem() },
-//                        pageSwitcherShown = true,
-//                        isLoading = false,
-//                        message = null,
-//                        trendingTextShown = false
-//                    )
-//                }
-//                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
-//            }.onError { _, message ->
-//                _uiState.update {
-//                    it.copy(
-//                        message = UIText.DynamicString(message),
-//                        isLoading = false,
-//                        pageSwitcherShown = false,
-//                        trendingTextShown = false
-//                    )
-//                }
-//            }
+            searchRepository.searchPerson(query = query, page = page).onSuccess { result ->
+                val searchedPeople = result.results
+
+                if (searchedPeople.isEmpty()) {
+                    _uiState.update {
+                        it.copy(
+                            message = "No person found",
+                            isLoading = false,
+                            searchedMulti = listOf(),
+                            pageSwitcherShown = false,
+                            trendingTextShown = false
+                        )
+                    }
+                    return@onSuccess
+                }
+
+                _uiState.update {
+                    it.copy(
+                        page = result.page,
+                        totalPages = result.totalPages,
+                        totalResults = result.totalResults,
+                        searchedMulti = searchedPeople.map { person -> person.toMultiItem() },
+                        pageSwitcherShown = true,
+                        isLoading = false,
+                        message = EMPTY,
+                        trendingTextShown = false
+                    )
+                }
+                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
+            }.onError { _, message ->
+                _uiState.update {
+                    it.copy(
+                        message = message,
+                        isLoading = false,
+                        pageSwitcherShown = false,
+                        trendingTextShown = false
+                    )
+                }
+            }
         }
     }
 
@@ -301,51 +305,51 @@ class SearchViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-//            searchRepository.searchTv(query = query, page = page).onSuccess { result ->
-//                val searchedTv = result.results
-//                val sortedTv = when (uiState.value.searchFilterSortType) {
-//                    SearchFilterSortType.POPULARITY -> searchedTv.sortedByDescending { it.popularity }
-//                    SearchFilterSortType.RELEASE_DATE -> searchedTv.sortedByDescending { it.firstAirDate }
-//                    SearchFilterSortType.VOTE_COUNT -> searchedTv.sortedByDescending { it.voteCount }
-//                    SearchFilterSortType.MOST_LIKED -> searchedTv.sortedByDescending { it.voteAverage }
-//                }
-//
-//                if (searchedTv.isEmpty()) {
-//                    _uiState.update {
-//                        it.copy(
-//                            message = UIText.StringResource(R.string.search_no_tv_shows_found),
-//                            isLoading = false,
-//                            searchedMulti = listOf(),
-//                            pageSwitcherShown = false,
-//                            trendingTextShown = false
-//                        )
-//                    }
-//                    return@onSuccess
-//                }
-//
-//                _uiState.update {
-//                    it.copy(
-//                        page = result.page,
-//                        totalPages = result.totalPages,
-//                        totalResults = result.totalResults,
-//                        searchedMulti = sortedTv.map { tv -> tv.toMultiItem() },
-//                        pageSwitcherShown = true,
-//                        isLoading = false,
-//                        message = null,
-//                        trendingTextShown = false
-//                    )
-//                }
-//                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
-//            }.onError { _, message ->
-//                _uiState.update {
-//                    it.copy(
-//                        message = UIText.DynamicString(message),
-//                        isLoading = false,
-//                        pageSwitcherShown = false,
-//                        trendingTextShown = false
-//                    )
-//                }
-//            }
+            searchRepository.searchTv(query = query, page = page).onSuccess { result ->
+                val searchedTv = result.results
+                val sortedTv = when (uiState.value.searchFilterSortType) {
+                    SearchFilterSortType.POPULARITY -> searchedTv.sortedByDescending { it.popularity }
+                    SearchFilterSortType.RELEASE_DATE -> searchedTv.sortedByDescending { it.firstAirDate }
+                    SearchFilterSortType.VOTE_COUNT -> searchedTv.sortedByDescending { it.voteCount }
+                    SearchFilterSortType.MOST_LIKED -> searchedTv.sortedByDescending { it.voteAverage }
+                }
+
+                if (searchedTv.isEmpty()) {
+                    _uiState.update {
+                        it.copy(
+                            message = "No TV Shows found",
+                            isLoading = false,
+                            searchedMulti = listOf(),
+                            pageSwitcherShown = false,
+                            trendingTextShown = false
+                        )
+                    }
+                    return@onSuccess
+                }
+
+                _uiState.update {
+                    it.copy(
+                        page = result.page,
+                        totalPages = result.totalPages,
+                        totalResults = result.totalResults,
+                        searchedMulti = sortedTv.map { tv -> tv.toMultiItem() },
+                        pageSwitcherShown = true,
+                        isLoading = false,
+                        message = EMPTY,
+                        trendingTextShown = false
+                    )
+                }
+                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
+            }.onError { _, message ->
+                _uiState.update {
+                    it.copy(
+                        message = message,
+                        isLoading = false,
+                        pageSwitcherShown = false,
+                        trendingTextShown = false
+                    )
+                }
+            }
         }
     }
 
