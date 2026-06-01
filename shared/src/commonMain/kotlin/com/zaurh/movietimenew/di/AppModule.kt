@@ -4,21 +4,25 @@ import androidx.lifecycle.SavedStateHandle
 import com.zaurh.movietimenew.data.repository.DiscoverRepoImpl
 import com.zaurh.movietimenew.data.repository.GenreRepoImpl
 import com.zaurh.movietimenew.data.repository.MovieRepoImpl
+import com.zaurh.movietimenew.data.repository.PeopleRepoImpl
 import com.zaurh.movietimenew.data.repository.SearchRepoImpl
 import com.zaurh.movietimenew.data.repository.TrendingRepoImpl
 import com.zaurh.movietimenew.data.service.DiscoverApi
 import com.zaurh.movietimenew.data.service.GenreApi
 import com.zaurh.movietimenew.data.service.MovieApi
+import com.zaurh.movietimenew.data.service.PersonApi
 import com.zaurh.movietimenew.data.service.SearchApi
 import com.zaurh.movietimenew.data.service.TrendingApi
 import com.zaurh.movietimenew.domain.repository.DiscoverRepository
 import com.zaurh.movietimenew.domain.repository.GenreRepository
 import com.zaurh.movietimenew.domain.repository.MovieRepository
+import com.zaurh.movietimenew.domain.repository.PeopleRepository
 import com.zaurh.movietimenew.domain.repository.SearchRepository
 import com.zaurh.movietimenew.domain.repository.TrendingRepository
 import com.zaurh.movietimenew.presentation.details.MovieDetailsViewModel
 import com.zaurh.movietimenew.presentation.discover.DiscoverViewModel
 import com.zaurh.movietimenew.presentation.main.MainViewModel
+import com.zaurh.movietimenew.presentation.person.PersonViewModel
 import com.zaurh.movietimenew.presentation.search.SearchViewModel
 import com.zaurh.movietimenew.util.Constants.API_KEY_V4
 import io.ktor.client.HttpClient
@@ -56,6 +60,7 @@ val appModule = module {
     single { DiscoverApi(get()) }
     single { SearchApi(get()) }
     single { TrendingApi(get()) }
+    single { PersonApi(get()) }
 
     single<MovieRepository> {
         MovieRepoImpl(get())
@@ -72,6 +77,9 @@ val appModule = module {
     single<TrendingRepository> {
         TrendingRepoImpl(get())
     }
+    single<PeopleRepository> {
+        PeopleRepoImpl(get())
+    }
 
     single { MainViewModel(movieRepository = get(), genreRepository = get()) }
 
@@ -83,6 +91,10 @@ val appModule = module {
 
     viewModel { (handle: SavedStateHandle) ->
         DiscoverViewModel(get(), handle)
+    }
+
+    viewModel { (handle: SavedStateHandle) ->
+        PersonViewModel(get(), handle)
     }
 }
 

@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.zaurh.movietimenew.presentation.person.PersonScreen
 import com.zaurh.movietimenew.presentation.details.DetailScreen
 import com.zaurh.movietimenew.presentation.discover.DiscoverScreen
 import com.zaurh.movietimenew.presentation.home.HomeScreen
@@ -154,28 +155,27 @@ fun NavGraph(
 //            )
 //        }
 //
-//        composable(
-//            route = Screen.PersonScreen.route,
-//            arguments = listOf(navArgument("personId") { type = NavType.LongType }
-//            ),
-//            enterTransition = {
-//                slideInHorizontally(initialOffsetX = { it })
-//            },
-//            popEnterTransition = {
-//                slideInHorizontally(initialOffsetX = { -it })
-//            },
-//            exitTransition = {
-//                slideOutHorizontally(targetOffsetX = { -it })
-//            },
-//            popExitTransition = {
-//                slideOutHorizontally(targetOffsetX = { it })
-//            }
-//        ) {
-//            PersonScreen(
-//                modifier = modifier,
-//                navController = navController
-//            )
-//        }
+        composable(
+            route = Screen.PersonScreen.route,
+            arguments = listOf(navArgument("personId") { type = NavType.LongType }
+            ),
+            enterTransition = {
+                slideInHorizontally(initialOffsetX = { it })
+            },
+            popEnterTransition = {
+                slideInHorizontally(initialOffsetX = { -it })
+            },
+            exitTransition = {
+                slideOutHorizontally(targetOffsetX = { -it })
+            },
+            popExitTransition = {
+                slideOutHorizontally(targetOffsetX = { it })
+            }
+        ) {
+            PersonScreen(
+                navController = navController
+            )
+        }
 //
 //        composable(
 //            route = Screen.WallpaperScreen.route,
