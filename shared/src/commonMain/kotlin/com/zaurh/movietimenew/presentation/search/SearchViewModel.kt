@@ -3,11 +3,12 @@ package com.zaurh.movietimenew.presentation.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zaurh.movietimenew.data.mapper.search.toMultiItem
+import com.zaurh.movietimenew.data.mapper.trending.toMultiItem
 import com.zaurh.movietimenew.domain.repository.SearchRepository
+import com.zaurh.movietimenew.domain.repository.TrendingRepository
 import com.zaurh.movietimenew.util.EMPTY
 import com.zaurh.movietimenew.util.onError
 import com.zaurh.movietimenew.util.onSuccess
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val searchRepository: SearchRepository,
-//    private val trendingRepository: TrendingRepository
+    private val trendingRepository: TrendingRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUIState())
@@ -355,117 +356,117 @@ class SearchViewModel(
 
     private fun getTrendingAll() {
         viewModelScope.launch {
-//            trendingRepository.getTrendingAll().onSuccess { result ->
-//                val searchedTrendingAll = result.results
-//
-//                val sortedTrendingAll = when (uiState.value.searchFilterSortType) {
-//                    SearchFilterSortType.POPULARITY -> searchedTrendingAll.sortedByDescending { it.popularity }
-//                    SearchFilterSortType.RELEASE_DATE -> searchedTrendingAll.sortedByDescending { it.releaseDate.ifEmpty { it.firstAirDate } }
-//                    SearchFilterSortType.VOTE_COUNT -> searchedTrendingAll.sortedByDescending { it.voteCount }
-//                    SearchFilterSortType.MOST_LIKED -> searchedTrendingAll.sortedByDescending { it.voteAverage }
-//                }
-//
-//                _uiState.update {
-//                    it.copy(
-//                        totalResults = result.totalResults,
-//                        totalPages = result.totalPages,
-//                        page = result.page,
-//                        searchedMulti = sortedTrendingAll.map { all -> all.toMultiItem() },
-//                        pageSwitcherShown = false,
-//                        trendingTextShown = true,
-//                        message = null,
-//                        isLoading = false
-//                    )
-//                }
-//                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
-//            }
+            trendingRepository.getTrendingAll().onSuccess { result ->
+                val searchedTrendingAll = result.results
+
+                val sortedTrendingAll = when (uiState.value.searchFilterSortType) {
+                    SearchFilterSortType.POPULARITY -> searchedTrendingAll.sortedByDescending { it.popularity }
+                    SearchFilterSortType.RELEASE_DATE -> searchedTrendingAll.sortedByDescending { it.releaseDate.ifEmpty { it.firstAirDate } }
+                    SearchFilterSortType.VOTE_COUNT -> searchedTrendingAll.sortedByDescending { it.voteCount }
+                    SearchFilterSortType.MOST_LIKED -> searchedTrendingAll.sortedByDescending { it.voteAverage }
+                }
+
+                _uiState.update {
+                    it.copy(
+                        totalResults = result.totalResults,
+                        totalPages = result.totalPages,
+                        page = result.page,
+                        searchedMulti = sortedTrendingAll.map { all -> all.toMultiItem() },
+                        pageSwitcherShown = false,
+                        trendingTextShown = true,
+                        message = EMPTY,
+                        isLoading = false
+                    )
+                }
+                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
+            }
         }
     }
 
     private fun getTrendingMovies() {
         viewModelScope.launch {
-//            trendingRepository.getTrendingMovies().onSuccess { result ->
-//                val searchedTrendingMovies = result.results
-//
-//                val sortedTrendingMovies = when (uiState.value.searchFilterSortType) {
-//                    SearchFilterSortType.POPULARITY -> searchedTrendingMovies.sortedByDescending { it.popularity }
-//                    SearchFilterSortType.RELEASE_DATE -> searchedTrendingMovies.sortedByDescending { it.releaseDate }
-//                    SearchFilterSortType.VOTE_COUNT -> searchedTrendingMovies.sortedByDescending { it.voteCount }
-//                    SearchFilterSortType.MOST_LIKED -> searchedTrendingMovies.sortedByDescending { it.voteAverage }
-//                }
-//
-//                _uiState.update {
-//                    it.copy(
-//                        totalResults = result.totalResults,
-//                        totalPages = result.totalPages,
-//                        page = result.page,
-//                        searchedMulti = sortedTrendingMovies.map { all -> all.toMultiItem() },
-//                        pageSwitcherShown = false,
-//                        trendingTextShown = true,
-//                        message = null,
-//                        isLoading = false
-//                    )
-//                }
-//                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
-//            }
+            trendingRepository.getTrendingMovies().onSuccess { result ->
+                val searchedTrendingMovies = result.results
+
+                val sortedTrendingMovies = when (uiState.value.searchFilterSortType) {
+                    SearchFilterSortType.POPULARITY -> searchedTrendingMovies.sortedByDescending { it.popularity }
+                    SearchFilterSortType.RELEASE_DATE -> searchedTrendingMovies.sortedByDescending { it.releaseDate }
+                    SearchFilterSortType.VOTE_COUNT -> searchedTrendingMovies.sortedByDescending { it.voteCount }
+                    SearchFilterSortType.MOST_LIKED -> searchedTrendingMovies.sortedByDescending { it.voteAverage }
+                }
+
+                _uiState.update {
+                    it.copy(
+                        totalResults = result.totalResults,
+                        totalPages = result.totalPages,
+                        page = result.page,
+                        searchedMulti = sortedTrendingMovies.map { all -> all.toMultiItem() },
+                        pageSwitcherShown = false,
+                        trendingTextShown = true,
+                        message = EMPTY,
+                        isLoading = false
+                    )
+                }
+                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
+            }
         }
     }
 
     private fun getTrendingPeople() {
         viewModelScope.launch {
-//            trendingRepository.getTrendingPeople().onSuccess { result ->
-//                val searchedTrendingPeople = result.results
-//
-//                val sortedTrendingPeople = when (uiState.value.searchFilterSortType) {
-//                    SearchFilterSortType.POPULARITY -> searchedTrendingPeople.sortedByDescending { it.popularity }
-//                    SearchFilterSortType.RELEASE_DATE -> searchedTrendingPeople.sortedByDescending { it.releaseDate }
-//                    SearchFilterSortType.VOTE_COUNT -> searchedTrendingPeople.sortedByDescending { it.voteCount }
-//                    SearchFilterSortType.MOST_LIKED -> searchedTrendingPeople.sortedByDescending { it.voteAverage }
-//                }
-//
-//                _uiState.update {
-//                    it.copy(
-//                        totalResults = result.totalResults,
-//                        totalPages = result.totalPages,
-//                        page = result.page,
-//                        searchedMulti = sortedTrendingPeople.map { all -> all.toMultiItem() },
-//                        pageSwitcherShown = false,
-//                        trendingTextShown = true,
-//                        message = null,
-//                        isLoading = false
-//                    )
-//                }
-//                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
-//            }
+            trendingRepository.getTrendingPeople().onSuccess { result ->
+                val searchedTrendingPeople = result.results
+
+                val sortedTrendingPeople = when (uiState.value.searchFilterSortType) {
+                    SearchFilterSortType.POPULARITY -> searchedTrendingPeople.sortedByDescending { it.popularity }
+                    SearchFilterSortType.RELEASE_DATE -> searchedTrendingPeople.sortedByDescending { it.releaseDate }
+                    SearchFilterSortType.VOTE_COUNT -> searchedTrendingPeople.sortedByDescending { it.voteCount }
+                    SearchFilterSortType.MOST_LIKED -> searchedTrendingPeople.sortedByDescending { it.voteAverage }
+                }
+
+                _uiState.update {
+                    it.copy(
+                        totalResults = result.totalResults,
+                        totalPages = result.totalPages,
+                        page = result.page,
+                        searchedMulti = sortedTrendingPeople.map { all -> all.toMultiItem() },
+                        pageSwitcherShown = false,
+                        trendingTextShown = true,
+                        message = EMPTY,
+                        isLoading = false
+                    )
+                }
+                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
+            }
         }
     }
 
     private fun getTrendingTv() {
         viewModelScope.launch {
-//            trendingRepository.getTrendingTv().onSuccess { result ->
-//                val searchedTrendingTv = result.results
-//
-//                val sortedTrendingTv = when (uiState.value.searchFilterSortType) {
-//                    SearchFilterSortType.POPULARITY -> searchedTrendingTv.sortedByDescending { it.popularity }
-//                    SearchFilterSortType.RELEASE_DATE -> searchedTrendingTv.sortedByDescending { it.firstAirDate }
-//                    SearchFilterSortType.VOTE_COUNT -> searchedTrendingTv.sortedByDescending { it.voteCount }
-//                    SearchFilterSortType.MOST_LIKED -> searchedTrendingTv.sortedByDescending { it.voteAverage }
-//                }
-//
-//                _uiState.update {
-//                    it.copy(
-//                        totalResults = result.totalResults,
-//                        totalPages = result.totalPages,
-//                        page = result.page,
-//                        searchedMulti = sortedTrendingTv.map { all -> all.toMultiItem() },
-//                        pageSwitcherShown = false,
-//                        trendingTextShown = true,
-//                        message = null,
-//                        isLoading = false
-//                    )
-//                }
-//                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
-//            }
+            trendingRepository.getTrendingTv().onSuccess { result ->
+                val searchedTrendingTv = result.results
+
+                val sortedTrendingTv = when (uiState.value.searchFilterSortType) {
+                    SearchFilterSortType.POPULARITY -> searchedTrendingTv.sortedByDescending { it.popularity }
+                    SearchFilterSortType.RELEASE_DATE -> searchedTrendingTv.sortedByDescending { it.firstAirDate }
+                    SearchFilterSortType.VOTE_COUNT -> searchedTrendingTv.sortedByDescending { it.voteCount }
+                    SearchFilterSortType.MOST_LIKED -> searchedTrendingTv.sortedByDescending { it.voteAverage }
+                }
+
+                _uiState.update {
+                    it.copy(
+                        totalResults = result.totalResults,
+                        totalPages = result.totalPages,
+                        page = result.page,
+                        searchedMulti = sortedTrendingTv.map { all -> all.toMultiItem() },
+                        pageSwitcherShown = false,
+                        trendingTextShown = true,
+                        message = EMPTY,
+                        isLoading = false
+                    )
+                }
+                _sideEffect.tryEmit(SearchSideEffect.ScrollToTop)
+            }
         }
     }
 }

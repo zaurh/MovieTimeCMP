@@ -5,14 +5,17 @@ import com.zaurh.movietimenew.data.repository.DiscoverRepoImpl
 import com.zaurh.movietimenew.data.repository.GenreRepoImpl
 import com.zaurh.movietimenew.data.repository.MovieRepoImpl
 import com.zaurh.movietimenew.data.repository.SearchRepoImpl
+import com.zaurh.movietimenew.data.repository.TrendingRepoImpl
 import com.zaurh.movietimenew.data.service.DiscoverApi
 import com.zaurh.movietimenew.data.service.GenreApi
 import com.zaurh.movietimenew.data.service.MovieApi
 import com.zaurh.movietimenew.data.service.SearchApi
+import com.zaurh.movietimenew.data.service.TrendingApi
 import com.zaurh.movietimenew.domain.repository.DiscoverRepository
 import com.zaurh.movietimenew.domain.repository.GenreRepository
 import com.zaurh.movietimenew.domain.repository.MovieRepository
 import com.zaurh.movietimenew.domain.repository.SearchRepository
+import com.zaurh.movietimenew.domain.repository.TrendingRepository
 import com.zaurh.movietimenew.presentation.details.MovieDetailsViewModel
 import com.zaurh.movietimenew.presentation.discover.DiscoverViewModel
 import com.zaurh.movietimenew.presentation.main.MainViewModel
@@ -52,6 +55,7 @@ val appModule = module {
     single { GenreApi(get()) }
     single { DiscoverApi(get()) }
     single { SearchApi(get()) }
+    single { TrendingApi(get()) }
 
     single<MovieRepository> {
         MovieRepoImpl(get())
@@ -65,10 +69,13 @@ val appModule = module {
     single<SearchRepository> {
         SearchRepoImpl(get())
     }
+    single<TrendingRepository> {
+        TrendingRepoImpl(get())
+    }
 
     single { MainViewModel(movieRepository = get(), genreRepository = get()) }
 
-    single { SearchViewModel(get()) }
+    single { SearchViewModel(get(), get()) }
 
     viewModel { (handle: SavedStateHandle) ->
         MovieDetailsViewModel(get(), handle)
