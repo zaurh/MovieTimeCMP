@@ -1,5 +1,6 @@
 package com.zaurh.movietimenew.presentation.search
 
+import com.zaurh.movietimenew.domain.models.search.multi.SearchMultiItem
 import com.zaurh.movietimenew.util.EMPTY
 import com.zaurh.movietimenew.util.ZERO
 
@@ -11,7 +12,7 @@ data class SearchUIState(
     val searchQuery: String = EMPTY,
     val searchFilterType: SearchFilterType = SearchFilterType.ALL,
     val searchFilterSortType: SearchFilterSortType = SearchFilterSortType.POPULARITY,
-//    val searchedMulti: List<SearchMultiItem> = emptyList(),
+    val searchedMulti: List<SearchMultiItem> = emptyList(),
     val pageSwitcherShown: Boolean = false,
     val trendingTextShown: Boolean = false,
     val searchFilterBottomSheetEnabled: Boolean = false,

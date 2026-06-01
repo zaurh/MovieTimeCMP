@@ -18,7 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.zaurh.movietimenew.domain.models.search.multi.SearchMultiItem
 import com.zaurh.movietimenew.presentation.search.component.SearchFilterItem
+import com.zaurh.movietimenew.presentation.search.component.SearchList
 import com.zaurh.movietimenew.presentation.search.component.bottomsheet.SearchFilterBottomSheet
 import com.zaurh.movietimenew.presentation.shared.PageSwitcher
 import com.zaurh.movietimenew.presentation.shared.SearchBar
@@ -117,19 +119,19 @@ fun SearchContent(
                 }
             )
         }
-//        SearchList(
-//            lazyState = lazyState,
-//            multi = uiState.searchedMulti,
-//            onMultiClick = { id, type ->
-//                when (type) {
-//                    SearchType.MOVIE.typeName -> onAction(SearchAction.OnMovieClicked(id))
-//                    SearchType.PERSON.typeName -> onAction(SearchAction.OnPersonClicked(id))
-//                    SearchType.TV.typeName -> onAction(SearchAction.OnTvClicked(id))
-//                }
-//            },
-//            releaseDateShown = uiState.releaseDateShown,
-//            trendingTextShown = uiState.trendingTextShown
-//        )
+        SearchList(
+            lazyState = lazyState,
+            multi = uiState.searchedMulti,
+            onMultiClick = { id, type ->
+                when (type) {
+                    SearchType.MOVIE.typeName -> onAction(SearchAction.OnMovieClicked(id))
+                    SearchType.PERSON.typeName -> onAction(SearchAction.OnPersonClicked(id))
+                    SearchType.TV.typeName -> onAction(SearchAction.OnTvClicked(id))
+                }
+            },
+            releaseDateShown = uiState.releaseDateShown,
+            trendingTextShown = uiState.trendingTextShown
+        )
     }
 
     SearchFilterBottomSheet(
@@ -141,28 +143,28 @@ fun SearchContent(
 @Preview
 @Composable
 private fun SearchPreview() {
-//    fun getMulti(type: String): SearchMultiItem {
-//        return SearchMultiItem(
-//            title = "Shrek",
-//            mediaType = type,
-//            overview = "Shrek is green",
-//            releaseDate = "2023"
-//        )
-//    }
-//
-//    SearchContent(
-//        uiState = SearchUIState(
-//            searchedMulti = listOf(
-//                getMulti("movie"),
-//                getMulti("tv"),
-//                getMulti("person")
-//            ),
-//            totalPages = 10,
-//            isLoading = true,
-//            releaseDateShown = true,
-//            pageSwitcherShown = true,
-//            trendingTextShown = true
-//        ),
-//        lazyState = rememberLazyListState()
-//    )
+    fun getMulti(type: String): SearchMultiItem {
+        return SearchMultiItem(
+            title = "Shrek",
+            mediaType = type,
+            overview = "Shrek is green",
+            releaseDate = "2023"
+        )
+    }
+
+    SearchContent(
+        uiState = SearchUIState(
+            searchedMulti = listOf(
+                getMulti("movie"),
+                getMulti("tv"),
+                getMulti("person")
+            ),
+            totalPages = 10,
+            isLoading = true,
+            releaseDateShown = true,
+            pageSwitcherShown = true,
+            trendingTextShown = true
+        ),
+        lazyState = rememberLazyListState()
+    )
 }

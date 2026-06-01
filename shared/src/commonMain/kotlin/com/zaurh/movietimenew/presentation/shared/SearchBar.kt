@@ -1,7 +1,9 @@
 package com.zaurh.movietimenew.presentation.shared
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,6 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import movietimenew.shared.generated.resources.Res
+import movietimenew.shared.generated.resources.ic_clear
+import movietimenew.shared.generated.resources.ic_search
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SearchBar(
@@ -39,10 +45,11 @@ fun SearchBar(
             focusedIndicatorColor = Color.Transparent
         ),
         leadingIcon = {
-//            Icon(
-//                imageVector = Icons.Default.Search,
-//                contentDescription = ""
-//            )
+            Icon(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(Res.drawable.ic_search),
+                contentDescription = ""
+            )
         },
         singleLine = true,
         trailingIcon = {
@@ -50,10 +57,11 @@ fun SearchBar(
                 IconButton(onClick = {
                     onClearClicked()
                 }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Clear,
-//                        contentDescription = ""
-//                    )
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(Res.drawable.ic_clear),
+                        contentDescription = ""
+                    )
                 }
             }
         }
