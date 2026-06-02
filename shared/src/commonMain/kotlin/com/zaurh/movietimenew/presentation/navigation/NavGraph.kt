@@ -12,6 +12,7 @@ import com.zaurh.movietimenew.presentation.person.PersonScreen
 import com.zaurh.movietimenew.presentation.details.DetailScreen
 import com.zaurh.movietimenew.presentation.discover.DiscoverScreen
 import com.zaurh.movietimenew.presentation.home.HomeScreen
+import com.zaurh.movietimenew.presentation.tv.TvDetailsScreen
 
 @Composable
 fun NavGraph(
@@ -131,30 +132,29 @@ fun NavGraph(
                 navController = navController
             )
         }
-//
-//        composable(
-//            route = Screen.TvDetailsScreen.route,
-//            arguments = listOf(navArgument("seriesId") { type = NavType.LongType }
-//            ),
-//            enterTransition = {
-//                slideInHorizontally(initialOffsetX = { it })
-//            },
-//            popEnterTransition = {
-//                slideInHorizontally(initialOffsetX = { -it })
-//            },
-//            exitTransition = {
-//                slideOutHorizontally(targetOffsetX = { -it })
-//            },
-//            popExitTransition = {
-//                slideOutHorizontally(targetOffsetX = { it })
-//            }
-//        ) {
-//            TvDetailsScreen(
-//                modifier = modifier,
-//                navController = navController
-//            )
-//        }
-//
+
+        composable(
+            route = Screen.TvDetailsScreen.route,
+            arguments = listOf(navArgument("seriesId") { type = NavType.LongType }
+            ),
+            enterTransition = {
+                slideInHorizontally(initialOffsetX = { it })
+            },
+            popEnterTransition = {
+                slideInHorizontally(initialOffsetX = { -it })
+            },
+            exitTransition = {
+                slideOutHorizontally(targetOffsetX = { -it })
+            },
+            popExitTransition = {
+                slideOutHorizontally(targetOffsetX = { it })
+            }
+        ) {
+            TvDetailsScreen(
+                navController = navController
+            )
+        }
+
         composable(
             route = Screen.PersonScreen.route,
             arguments = listOf(navArgument("personId") { type = NavType.LongType }
