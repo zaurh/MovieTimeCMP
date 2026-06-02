@@ -28,6 +28,7 @@ import com.zaurh.movietimenew.presentation.discover.DiscoverViewModel
 import com.zaurh.movietimenew.presentation.main.MainViewModel
 import com.zaurh.movietimenew.presentation.person.PersonViewModel
 import com.zaurh.movietimenew.presentation.search.SearchViewModel
+import com.zaurh.movietimenew.presentation.wallpaper.WallpaperViewModel
 import com.zaurh.movietimenew.util.Constants.API_KEY_V4
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -106,6 +107,10 @@ val appModule = module {
     }
     viewModel { (handle: SavedStateHandle) ->
         TvDetailsViewModel(get(), handle)
+    }
+
+    viewModel { (handle: SavedStateHandle) ->
+        WallpaperViewModel(get(),get(), get(), handle)
     }
 }
 
