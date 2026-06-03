@@ -8,11 +8,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.zaurh.movietimenew.presentation.person.PersonScreen
 import com.zaurh.movietimenew.presentation.details.DetailScreen
 import com.zaurh.movietimenew.presentation.discover.DiscoverScreen
 import com.zaurh.movietimenew.presentation.home.HomeScreen
+import com.zaurh.movietimenew.presentation.person.PersonScreen
 import com.zaurh.movietimenew.presentation.tv.TvDetailsScreen
+import com.zaurh.movietimenew.presentation.wallpaper.WallpaperScreen
 
 @Composable
 fun NavGraph(
@@ -176,28 +177,28 @@ fun NavGraph(
                 navController = navController
             )
         }
-//
-//        composable(
-//            route = Screen.WallpaperScreen.route,
-//            arguments = listOf(
-//                navArgument("id") { type = NavType.LongType },
-//                navArgument("contentType") { type = NavType.StringType }
-//            ),
-//            enterTransition = {
-//                slideInHorizontally(initialOffsetX = { it })
-//            },
-//            popEnterTransition = {
-//                slideInHorizontally(initialOffsetX = { -it })
-//            },
-//            exitTransition = {
-//                slideOutHorizontally(targetOffsetX = { -it })
-//            },
-//            popExitTransition = {
-//                slideOutHorizontally(targetOffsetX = { it })
-//            }
-//        ) {
-//            WallpaperScreen(navController = navController)
-//        }
+
+        composable(
+            route = Screen.WallpaperScreen.route,
+            arguments = listOf(
+                navArgument("id") { type = NavType.LongType },
+                navArgument("contentType") { type = NavType.StringType }
+            ),
+            enterTransition = {
+                slideInHorizontally(initialOffsetX = { it })
+            },
+            popEnterTransition = {
+                slideInHorizontally(initialOffsetX = { -it })
+            },
+            exitTransition = {
+                slideOutHorizontally(targetOffsetX = { -it })
+            },
+            popExitTransition = {
+                slideOutHorizontally(targetOffsetX = { it })
+            }
+        ) {
+            WallpaperScreen(navController = navController)
+        }
 //
 //        composable(
 //            route = Screen.SignInScreen.route,

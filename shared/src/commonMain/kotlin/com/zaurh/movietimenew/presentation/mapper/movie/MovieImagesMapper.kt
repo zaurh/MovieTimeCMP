@@ -1,9 +1,9 @@
-package com.zaurh.movietimenew.presentation.mapper.person
+package com.zaurh.movietimenew.presentation.mapper.movie
 
-import com.zaurh.movietimenew.domain.models.person.person_image.PersonImagesItem
+import com.zaurh.movietimenew.domain.models.movie.movie_image.MovieImagesItem
 import com.zaurh.movietimenew.presentation.model.WallpaperUIModel
 
-fun PersonImagesItem.toUIModel(): WallpaperUIModel {
+fun MovieImagesItem.toUIModel(): WallpaperUIModel {
     return WallpaperUIModel(
         filePath = this.filePath,
         voteAverage = this.voteAverage,
